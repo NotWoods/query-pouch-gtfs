@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { Duration, Moment } from 'moment';
 import { CalendarDate } from '../interfaces';
-import { extractDocs } from './utils';
+import { extractDocs } from '../utils';
 
 /**
  * Returns every exception for the given service ID

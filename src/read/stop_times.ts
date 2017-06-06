@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { stopTime, trip } from '../uri'
 import { StopTime, Trip } from '../interfaces';
-import { extractDocs, timeOnly, notFound } from './utils';
+import { extractDocs, timeOnly, notFound } from '../utils';
 
 /**
  * Get the stop times associated with a trip, sorted by stop_sequence.

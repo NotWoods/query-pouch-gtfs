@@ -2,7 +2,7 @@ import { stopTime, trip } from '../uri';
 import { Route, StopTime, Trip, Calendar } from '../interfaces';
 import { allTripsForRoute } from './trips'
 import { getDays, Weekdays } from './calendar';
-import { extractDocs } from './utils'
+import { extractDocs } from '../utils'
 
 /**
  * Returns the name string from the route. route_long_name is preferred,

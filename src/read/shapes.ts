@@ -1,5 +1,5 @@
 import { Shape } from '../interfaces';
-import { extractDocs } from './utils';
+import { extractDocs } from '../utils';
 
 /**
  * Returns every point in a shape, sorted by their shape_pt_sequence

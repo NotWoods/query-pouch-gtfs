@@ -3,7 +3,7 @@ import 'moment-range';
 import { trip } from '../uri';
 import { Trip, StopTime } from '../interfaces';
 import { getTripSchedule, scheduleRange } from './stop_times';
-import { extractDocs, removeItem, timeOnly } from './utils';
+import { extractDocs, removeItem, timeOnly } from '../utils';
 
 /**
  * Returns the name of the trip. Uses trip_short_name or trip_headsign,
