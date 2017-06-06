@@ -1,66 +1,5 @@
 # gtfs-to-pouch
-Tools to work with GTFS schedules using PouchDB databases.
-
-This library provides scripts to convert GTFS files to a PouchDB database,
-and tools to query data from the databases after they are loaded.
-
-## Create dumpfile
-Convert a GTFS file to PouchDB dumpfiles. Exported from `'gtfs-to-pouch/dist/dump'`
-
-Transit data is commonly stored in the GTFS format, and this script can
-unzip it and store it in a PouchDB database dumpfile, which can be statically
-hosted then loaded onto clients.
-
-### API
-
-```ts
-function parseGTFS(data: DataType, outputDir: string): Promise<void>
-```
-- **data**: either a path to a GTFS file or folder, or a stream/buffer representing zip contents
-- **outputDir**: path to the output directory
-
-### Command Line
-
-Examples:
-```
-gtfs-to-pouch -i gtfs.zip -o ./gtfs-dump
-gtfs-to-pouch --output ./gtfs-dump < gtfs.zip
-gtfs-to-pouch --input ./gtfs-files -o ./gtfs-dump
-```
-
-Options:
-```
--i, --input   Input path pointing to GTFS file or directory.
-              Can also pipe from stdin.
--o, --output  Output directory, relative to the current working directory
--h, --help    Show help text
-```
-
-## Load dumpfile
-Loads all dumpfiles on the client. Exported from `'gtfs-to-pouch/dist/load'`
-
-```ts
-function loadAll(prefix?: string): Promise<{
-	agency: PouchDB.Database<Agency>
-	calendar: PouchDB.Database<Calendar>
-	calendar_dates: PouchDB.Database<CalendarDate>
-	fare_attributes: PouchDB.Database<FareAttribute>
-	fare_rules: PouchDB.Database<FareRule>
-	feed_info: PouchDB.Database<FeedInfo>
-	frequencies: PouchDB.Database<Frequency>
-	routes: PouchDB.Database<Route>
-	shapes: PouchDB.Database<Shape>
-	stops: PouchDB.Database<Stop>
-	stop_times: PouchDB.Database<StopTime>
-	transfers: PouchDB.Database<Transfer>
-	trips: PouchDB.Database<Trip>
-}>
-```
-- **prefix**: URL for the folder where the dumpfiles are stored. If omitted,
-  the root of the server is assumed to be the folder.
-
-## Read information from the database
-Various functions exported under `'gtfs-to-pouch/dist/read'`.
+Tools to query data from GTFS schedules using PouchDB databases.
 
 Most of the functions follow a pattern where the function is called like
 ```ts
@@ -73,7 +12,7 @@ a promise, which resolves when the information is loaded from a database.
 In general, databases are passed inside the first function, and ids are passed
 in the second.
 
-### Agency
+## Agency
 ```ts
 function getAgency(
 	db: PouchDB.Database<Agency>
@@ -83,7 +22,7 @@ Gets an agency from the schedule, or the first listed agency if no ID is
 used. Since most schedules have only 1 agency without an agency_id property,
 this function will return that agency.
 
-### Calendar Dates
+## Calendar Dates
 ```ts
 function getCalendarDate(
 	db: PouchDB.Database<CalendarDate>
@@ -109,7 +48,7 @@ Returns exceptions for the following month, or a custom duration instead.
 - **now**: The current time. Can be overriden.
 
 
-### Calendar
+## Calendar
 ```ts
 function calendarEntryToDays(cal: Calendar): Set<Weekdays>
 ```
@@ -136,7 +75,7 @@ Returns a string representing days of service, such as 'Daily' or 'Mon - Fri'
   * short: Sun, Mon, ...
   * min: Su, Mo, ...
 
-### Routes
+## Routes
 ```ts
 function getRouteName(route: Route): string
 ```
@@ -176,7 +115,7 @@ function routeDays(
 Returns all days of the week that a route is active on
 
 
-### Shapes
+## Shapes
 ```ts
 function getShapePoint(
 	db: PouchDB.Database<Shape>
@@ -198,7 +137,7 @@ Converts a series of shape point into a GeoJSON line string.
 The shape array should be sorted and all belong to the same shape_id
 
 
-### Stop Times
+## Stop Times
 ```ts
 function getStopTime(
 	db: PouchDB.Database<StopTime>
@@ -251,7 +190,7 @@ function nextStopOfRoute(
 ): (route_id: string, now?: moment.Moment) => Promise<StopTime>
 ```
 
-### Stops
+## Stops
 ```ts
 function getStop(
 	db: PouchDB.Database<Stop>,
@@ -296,7 +235,7 @@ generated without loading the entire stop database.
 - **bounds**: If set, the stops returned are limited to a certain area.
 
 
-### Trips
+## Trips
 ```ts
 function getTrip(
 	tripDB: PouchDB.Database<Trip>
@@ -347,5 +286,5 @@ Gets the previous and following trips in this trip's route;
 that is, the trip that took place immediately before and immediately after.
 
 
-## GTFS object interfaces
-Typescript interfaces exported under `'gtfs-to-pouch/dist/interfaces'`.
+# GTFS object interfaces
+Typescript interfaces are also exported under `'gtfs-to-pouch/dist/interfaces'`.
