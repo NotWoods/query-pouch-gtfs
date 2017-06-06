@@ -1,7 +1,7 @@
 {
   "name": "pouch-gtfs-reader",
   "version": "2.0.0",
-  "description": "Reader tools to work with GTFS schedules using PouchDB databases.",
+  "description": "Tools to query data from GTFS schedules using PouchDB databases.",
   "repository": "NotWoods/pouch-gtfs-reader",
   "main": "dist/index.js",
   "module": "es/index.js",
@@ -9,8 +9,6 @@
     "@types/geojson": "^1.0.2",
     "@types/moment-range": "^3.0.0",
     "@types/pouchdb": "^5.4.28",
-    "rollup": "^0.42.0",
-    "rollup-plugin-typescript2": "^0.4.3",
     "ts-jest": "^20.0.4",
     "typescript": "^2.3.2"
   },
@@ -20,7 +18,10 @@
     "moment-range": "^3.0.3"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build-es": "tsc --outDir es",
+    "build-cjs": "tsc --outDir es",
+    "prepare": "npm run build-es && npm run build-cjs"
   },
   "files": [
     "dist",
