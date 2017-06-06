@@ -4,16 +4,6 @@ import { StopTime, Trip } from '../interfaces';
 import { extractDocs, timeOnly, notFound } from './utils';
 
 /**
- * Gets a stop time from the database
- */
-export function getStopTime(
-	db: PouchDB.Database<StopTime>
-): (trip_id: string, stop_id: string, stop_sequence: number) => Promise<StopTime> {
-	return (trip_id, stop_id, stop_sequence) =>
-		db.get(stopTime({ trip_id, stop_id, stop_sequence: String(stop_sequence) }))
-}
-
-/**
  * Get the stop times associated with a trip, sorted by stop_sequence.
  * Throws 404 error if no schedule is found.
  */

@@ -1,17 +1,5 @@
-import { shapePoint } from '../uri';
 import { Shape } from '../interfaces';
 import { extractDocs } from './utils';
-
-/**
- * Returns a specific point in a shape
- */
-export function getShapePoint(
-	db: PouchDB.Database<Shape>
-): (shape_id: string, shape_pt_sequence: number) => Promise<Shape> {
-	return async (shape_id, sequence) => db.get(shapePoint({
-		shape_id, shape_pt_sequence: String(sequence)
-	}));
-}
 
 /**
  * Returns every point in a shape, sorted by their shape_pt_sequence

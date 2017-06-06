@@ -3,41 +3,7 @@ import 'moment-range';
 import { trip } from '../uri';
 import { Trip, StopTime } from '../interfaces';
 import { getTripSchedule, scheduleRange } from './stop_times';
-import { extractDocs, removeItem, timeOnly, notFound } from './utils';
-
-/**
- * Get a trip based on its `trip_id`, which is different from the `_id`
- * used in the database. Providing a `route_id` will speed up the lookup.
- */
-export function getTrip(
-	tripDB: PouchDB.Database<Trip>
-): (trip_id: string, route_id?: string) => Promise<Trip> {
-	return async (tripID, routeID) => {
-		if (routeID) {
-			// If we know the route ID, the ID is easily generated
-			const { rows } = await tripDB.allDocs({
-				startkey: `trip/${routeID}/${tripID}/`,
-				endkey: `trip/${routeID}/${tripID}/\uffff`,
-				limit: 1,
-				include_docs: true,
-			});
-
-			if (rows.length === 0) throw notFound('missing');
-			return rows[0].doc;
-		} else {
-			// Otherwise look for the specific trip in an ID list
-			const trips = await tripDB.allDocs({
-				startkey: 'trip/',
-				endkey: 'trip/\uffff',
-			});
-
-			const desiredRow = trips.rows.find(row => trip(row.id).trip_id === tripID);
-			// If not found, throw an error
-			if (!desiredRow) throw notFound('missing');
-			return tripDB.get(desiredRow.id);
-		}
-	}
-}
+import { extractDocs, removeItem, timeOnly } from './utils';
 
 /**
  * Returns the name of the trip. Uses trip_short_name or trip_headsign,

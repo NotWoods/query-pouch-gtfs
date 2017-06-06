@@ -1,30 +1,9 @@
 import { Stop } from '../interfaces';
 import { stop } from '../uri';
-import { notFound } from './utils'
 
 export interface LatLngBounds {
 	southwest: GeoJSON.Position
 	northeast: GeoJSON.Position
-}
-
-/**
- * Returns a stop from the database
- */
-export function getStop(
-	db: PouchDB.Database<Stop>,
-): (stop_id: string) => Promise<Stop> {
-	return async stopID => {
-		const { rows } = await db.allDocs({
-			include_docs: true,
-			limit: 1,
-			startkey: `stop/${stopID}/`,
-			endkey: `stop/${stopID}/\uffff`
-		});
-
-		if (rows.length === 0) throw notFound('missing');
-
-		return rows[0].doc;
-	}
 }
 
 interface LatLng {

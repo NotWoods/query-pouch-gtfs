@@ -9,6 +9,8 @@
     "@types/geojson": "^1.0.2",
     "@types/moment-range": "^3.0.0",
     "@types/pouchdb": "^5.4.28",
+    "rollup": "^0.42.0",
+    "rollup-plugin-typescript2": "^0.4.3",
     "ts-jest": "^20.0.4",
     "typescript": "^2.3.2"
   },
