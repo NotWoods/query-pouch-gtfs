@@ -1,6 +1,6 @@
 {
   "name": "query-pouch-gtfs",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Tools to query data from GTFS schedules using PouchDB databases.",
   "repository": "NotWoods/query-pouch-gtfs",
   "main": "dist/index.js",
