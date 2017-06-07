@@ -32,4 +32,4 @@ export const shapePoint: DocURI<{
 
 export const stop: DocURI<{
 	stop_id: string, stop_lon: string, stop_lat: string
-}> = route('stop/:stop_id/:stop_lon/:stop_lat]');
+}> = route('stop/:stop_id/:stop_lon/:stop_lat');

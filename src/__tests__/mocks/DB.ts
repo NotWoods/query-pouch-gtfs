@@ -2,10 +2,12 @@ export type WithKey = PouchDB.Core.AllDocsWithKeyOptions;
 export type WithKeys = PouchDB.Core.AllDocsWithKeysOptions;
 export type WithinRange = PouchDB.Core.AllDocsWithinRangeOptions
 
+export type Encodeable = { _id: string, _rev?: string };
+
 /**
  * Only get and allDocs are called by functions in the `read` folder.
  */
-export class MockDB<T extends { _id: string }> {
+export class MockDB<T extends Encodeable> {
 	private docs: Map<string, T>
 	name: string;
 
@@ -84,6 +86,7 @@ export class MockDB<T extends { _id: string }> {
 
 	async bulkDocs(docs: T[]): Promise<PouchDB.Core.BasicResponse[]> {
 		return docs.map(doc => {
+			doc._rev = '1-xxx';
 			this.docs.set(doc._id, doc);
 
 			return {
@@ -94,3 +97,5 @@ export class MockDB<T extends { _id: string }> {
 		})
 	}
 }
+
+test('noop test', () => {})
