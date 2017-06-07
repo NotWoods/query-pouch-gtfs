@@ -1,3 +1,8 @@
+export type GTFSName = 'agency' | 'calendar' | 'calendar_dates'
+	| 'fare_attributes' | 'fare_rules' | 'feed_info' | 'frequencies'
+	| 'routes' | 'shapes' | 'stops' | 'stop_times' | 'transfers' | 'trips';
+
+
 export interface Agency {
 	_id: string
 	agency_id?: string

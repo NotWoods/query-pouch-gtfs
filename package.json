@@ -5,6 +5,7 @@
   "repository": "NotWoods/query-pouch-gtfs",
   "main": "dist/index.js",
   "module": "es/index.js",
+  "types": "es/index.d.ts",
   "license": "MIT",
   "devDependencies": {
     "@types/geojson": "^1.0.2",
