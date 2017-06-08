@@ -1,11 +1,11 @@
-import * as Moment from 'moment';
-import { extendMoment } from 'moment-range';
+import * as moment from 'moment';
+import { extendMoment, Range } from 'moment-range';
 import { trip } from '../uri';
 import { Trip, StopTime } from '../interfaces';
 import { getTripSchedule, scheduleRange } from './stop_times';
 import { extractDocs, removeItem, timeOnly } from '../utils';
 
-const moment = extendMoment(Moment);
+extendMoment(moment);
 
 /**
  * Returns the name of the trip. Uses trip_short_name or trip_headsign,
@@ -38,7 +38,7 @@ export function allTripsForRoute(
  */
 export function tripTimes(
 	stopTimeDB: PouchDB.Database<StopTime>,
-): (trip_id: string) => Promise<Moment.Range> {
+): (trip_id: string) => Promise<Range> {
 	return async id => scheduleRange(await getTripSchedule(stopTimeDB)(id));
 }
 
@@ -50,7 +50,7 @@ export function tripTimes(
 export function currentTrip(
 	tripDB: PouchDB.Database<Trip>,
 	stopTimeDB: PouchDB.Database<StopTime>,
-): (route_id: string, now?: Moment.Moment) => Promise<Trip> {
+): (route_id: string, now?: moment.Moment) => Promise<Trip> {
 	return async (routeID, now = moment()) => {
 		// Get the ID of every trip for this route
 		const trips = await tripDB.allDocs({
@@ -63,7 +63,7 @@ export function currentTrip(
 
 		// Get the time range for each trip, and save it to ranges
 		// if it overlaps with the current time
-		const ranges: { start: Moment.Moment, _id: string }[] = [];
+		const ranges: { start: moment.Moment, _id: string }[] = [];
 		const _tripTimes = tripTimes(stopTimeDB);
 		await Promise.all(trips.rows.map(async t => {
 			const { trip_id } = trip(t.id);
@@ -113,7 +113,7 @@ export function siblingTrips(
 
 		// Push trips into containers based on wheter they take place
 		// before the passed trip or after
-		type Result = { trip: Trip, range: Moment.Range };
+		type Result = { trip: Trip, range: Range };
 		let before: Result[] = [];
 		let after: Result[] = [];
 		await Promise.all(allTrips.map(async trip => {
