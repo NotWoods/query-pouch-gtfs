@@ -156,15 +156,15 @@ export function nextStopOfRoute(
  * stop times.
  */
 export function scheduleRange(schedule: Iterable<StopTime>): Range {
-	let earliest = moment(Number.POSITIVE_INFINITY);
-	let latest = moment(0);
+	let earliest = Number.POSITIVE_INFINITY;
+	let latest = 0;
 	for (const time of schedule) {
-		const start = moment(time.arrival_time, 'H:mm:ss');
-		const end = moment(time.departure_time, 'H:mm:ss');
+		const start = moment(time.arrival_time, 'H:mm:ss').valueOf();
+		const end = moment(time.departure_time, 'H:mm:ss').valueOf();
 
 		if (start < earliest) earliest = start;
 		if (end > latest) latest = end;
 	}
 
-	return moment.range(earliest, latest);
+	return moment.range(moment(earliest), moment(latest));
 }
