@@ -1,5 +1,6 @@
-import { Stop } from '../interfaces';
-import { stop } from '../uri';
+import { Stop, Trip, StopTime } from '../interfaces';
+import { stop, trip, stopTime } from '../uri';
+import { notFound } from '../utils';
 
 export interface LatLngBounds {
 	southwest: GeoJSON.Position
@@ -30,6 +31,43 @@ interface ReverseGeocodingResult {
 }
 interface ReverseGeocodingResponse {
 	results: ReverseGeocodingResult[]
+}
+
+/**
+ * Returns the _id property of a stop document based on the
+ * stop_id. Should only be used internally.
+ */
+export function getStopDocumentID(
+	db: PouchDB.Database<Stop>,
+): (stop_id: string) => Promise<string> {
+	return async stopID => {
+		const { rows } = await db.allDocs({
+			limit: 1,
+			startkey: `stop/${stopID}/`,
+			endkey: `stop/${stopID}/\uffff`
+		});
+
+		if (rows.length === 0) throw notFound('missing');
+
+		return rows[0].id;
+	}
+}
+
+/**
+ * Returns the location of a stop from the database as a GeoJSON coordinate
+ */
+export function getStopCoordinates(
+	db: PouchDB.Database<Stop>,
+): (stop_id: string) => Promise<[number, number]> {
+	return async stopID => {
+		const docID = await getStopDocumentID(db)(stopID);
+
+		const stopInfo = stop(docID);
+		return [
+			parseFloat(stopInfo.stop_lon),
+			parseFloat(stopInfo.stop_lat)
+		];
+	}
 }
 
 /**
@@ -164,5 +202,35 @@ export function allStopsAsGeoJSON(
 			type: 'FeatureCollection',
 			features: points,
 		};
+	}
+}
+
+/**
+ * Returns the stop ID of every stop in a route
+ */
+export function allStopsInRoute(
+	tripDB: PouchDB.Database<Trip>,
+	stopTimeDB: PouchDB.Database<StopTime>,
+): (route_id: string) => Promise<string[]> {
+	return async routeID => {
+		const trips = await tripDB.allDocs({
+			startkey: `trip/${routeID}/`,
+			endkey: `trip/${routeID}/\uffff`,
+		});
+
+		const stopTimeRows = await Promise.all(trips.rows.map(row => {
+			const tripID = trip(row.id).trip_id;
+			return stopTimeDB.allDocs({
+				startkey: `time/${tripID}/`,
+				endkey: `time/${tripID}/\uffff`,
+			});
+		}));
+
+		let stopIDs = new Set();
+		stopTimeRows.forEach(res =>
+			res.rows.forEach(row => stopIDs.add(stopTime(row.id)))
+		);
+
+		return Array.from(stopIDs);
 	}
 }

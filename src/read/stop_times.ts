@@ -1,7 +1,10 @@
-import * as moment from 'moment';
+import * as Moment from 'moment';
+import { extendMoment } from 'moment-range';
 import { stopTime, trip } from '../uri'
 import { StopTime, Trip } from '../interfaces';
 import { extractDocs, timeOnly, notFound } from '../utils';
+
+const moment = extendMoment(Moment);
 
 /**
  * Get the stop times associated with a trip, sorted by stop_sequence.
@@ -114,7 +117,7 @@ export function nextStopFromList(
 
 export function nextStopOfTrip(
 	db: PouchDB.Database<StopTime>
-): (trip_id: string, now?: moment.Moment) => Promise<StopTime> {
+): (trip_id: string, now?: Moment.Moment) => Promise<StopTime> {
 	return async (tripID, now) => {
 		const list = await getTripSchedule(db)(tripID);
 		return nextStopFromList(list, now);
@@ -124,7 +127,7 @@ export function nextStopOfTrip(
 export function nextStopOfRoute(
 	tripDB: PouchDB.Database<Trip>,
 	stopTimeDB: PouchDB.Database<StopTime>,
-): (route_id: string, now?: moment.Moment) => Promise<StopTime> {
+): (route_id: string, now?: Moment.Moment) => Promise<StopTime> {
 	return async (routeID, now) => {
 		const routeTrips = await tripDB.allDocs({
 			startkey: `trip/${routeID}/`,
@@ -149,7 +152,7 @@ export function nextStopOfRoute(
  * Returns a moment range representing the first and last time in a set of
  * stop times.
  */
-export function scheduleRange(schedule: Iterable<StopTime>): moment.Range {
+export function scheduleRange(schedule: Iterable<StopTime>): Moment.Range {
 	let earliest = moment(Number.POSITIVE_INFINITY);
 	let latest = moment(0);
 	for (const time of schedule) {
