@@ -3,7 +3,7 @@ import { extendMoment, Range } from 'moment-range';
 import { trip } from '../uri';
 import { Trip, StopTime } from '../interfaces';
 import { getTripSchedule, scheduleRange } from './stop_times';
-import { extractDocs, removeItem, timeOnly } from '../utils';
+import { extractDocs, removeItem, timeOnly, notFound } from '../utils';
 
 extendMoment(moment);
 
@@ -58,6 +58,8 @@ export function currentTrip(
 			endkey: `trip/${routeID}/\uffff`,
 		});
 
+		if (trips.total_rows === 0) throw notFound('missing route');
+
 		// Get a moment for the current time, but with a 0 date
 		const nowTime = timeOnly(now);
 
@@ -69,7 +71,7 @@ export function currentTrip(
 			const { trip_id } = trip(t.id);
 			const range = await _tripTimes(trip_id);
 
-			if (range.start > nowTime && range.end < nowTime) {
+			if (range.start <= nowTime && range.end >= nowTime) {
 				ranges.push({ start: range.start, _id: t.id });
 			}
 		}));
@@ -125,16 +127,34 @@ export function siblingTrips(
 			else after.push({ trip, range });
 		}));
 
-		// Sort the arrays then get the items adjacent to the passed trip
+		// Sort the arrays based on the ranges
 		before.sort((a, b) => a.range.end.valueOf() - b.range.end.valueOf());
 		after.sort((a, b) => a.range.start.valueOf() - b.range.start.valueOf());
 
-		const lastBefore = before[before.length - 1];
-		const firstAfter = after[0];
+		// Get the items adjacent to the passed trip
+		let previous: Trip | null;
+		let following: Trip | null;
 
-		return {
-			previous: lastBefore ? lastBefore.trip : null,
-			following: firstAfter ? firstAfter.trip : null,
-		};
+		if (before.length > 0) {
+			// Use the last item in the `before` list as the previous trip
+			previous = before[before.length - 1].trip;
+		} else {
+			// If no trips take place before this one, use the last 'after' trip
+			// instead. (The last trip in the previous day.)
+			if (after.length > 0) previous = after[after.length - 1].trip;
+			else previous = null;
+		}
+
+		if (after.length > 0) {
+			// Use the first item in the `after` list as the following trip
+			following = after[0].trip;
+		} else {
+			// If no trips take place after this one, use the first 'before' trip
+			// instead. (The first trip in the next day.)
+			if (before.length > 0) following = before[0].trip;
+			else following = null;
+		}
+
+		return { previous, following };
 	}
 }

@@ -228,7 +228,7 @@ export function allStopsInRoute(
 
 		let stopIDs = new Set();
 		stopTimeRows.forEach(res =>
-			res.rows.forEach(row => stopIDs.add(stopTime(row.id)))
+			res.rows.forEach(row => stopIDs.add(stopTime(row.id).stop_id))
 		);
 
 		return Array.from(stopIDs);

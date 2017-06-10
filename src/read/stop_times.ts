@@ -137,6 +137,10 @@ export function nextStopOfRoute(
 			endkey: `trip/${routeID}/\uffff`,
 		});
 
+		if (routeTrips.total_rows === 0) {
+			throw notFound('missing route');
+		}
+
 		const desiredTrips = routeTrips.rows
 			.map(row => trip(row.id).trip_id);
 
