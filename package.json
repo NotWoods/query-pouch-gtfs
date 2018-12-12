@@ -11,7 +11,7 @@
     "@types/geojson": "^1.0.2",
     "@types/jest": "^19.2.4",
     "@types/moment-range": "^3.0.0",
-    "@types/pouchdb": "^5.4.28",
+    "@types/pouchdb": "^6.3.2",
     "jest": "^20.0.4",
     "ts-jest": "^20.0.4",
     "typescript": "^2.3.2"
