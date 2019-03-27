@@ -8,9 +8,9 @@
   "types": "es/index.d.ts",
   "license": "MIT",
   "devDependencies": {
-    "@types/geojson": "^1.0.2",
+    "@types/geojson": "^7946.0.7",
     "@types/jest": "^19.2.4",
-    "@types/moment-range": "^3.0.0",
+    "@types/moment-range": "^3.1.2",
     "@types/pouchdb": "^5.4.28",
     "jest": "^20.0.4",
     "ts-jest": "^20.0.4",
@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "docuri": "^4.2.2",
-    "moment": "^2.18.1",
-    "moment-range": "^3.0.3"
+    "moment": "^2.24.0",
+    "moment-range": "^3.1.1"
   },
   "scripts": {
     "test": "jest",
