@@ -9,17 +9,17 @@
   "license": "MIT",
   "devDependencies": {
     "@types/geojson": "^7946.0.7",
-    "@types/jest": "^19.2.4",
+    "@types/jest": "^24.0.11",
     "@types/moment-range": "^3.1.2",
     "@types/pouchdb": "^5.4.28",
-    "jest": "^20.0.4",
-    "ts-jest": "^20.0.4",
-    "typescript": "^2.3.2"
+    "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.4.2"
   },
   "dependencies": {
     "docuri": "^4.2.2",
     "moment": "^2.24.0",
-    "moment-range": "^3.1.1"
+    "moment-range": "^4.0.2"
   },
   "scripts": {
     "test": "jest",
@@ -40,14 +40,6 @@
     "transportation"
   ],
   "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "transform": {
-      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "/__tests__/.*\\.(ts|tsx|js)$"
+    "preset": "ts-jest/presets/js-with-ts"
   }
 }

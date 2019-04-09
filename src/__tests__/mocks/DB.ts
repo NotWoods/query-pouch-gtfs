@@ -80,7 +80,7 @@ export class MockDB<T extends Encodeable> {
 		return {
 			offset: options.skip || 0,
 			total_rows,
-			rows,
+			rows: rows as any,
 		};
 	}
 
