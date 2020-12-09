@@ -226,7 +226,7 @@ export function allStopsInRoute(
 			});
 		}));
 
-		let stopIDs = new Set();
+		let stopIDs = new Set<string>();
 		stopTimeRows.forEach(res =>
 			res.rows.forEach(row => stopIDs.add(stopTime(row.id).stop_id))
 		);

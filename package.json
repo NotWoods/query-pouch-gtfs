@@ -10,15 +10,15 @@
   "devDependencies": {
     "@types/geojson": "^7946.0.7",
     "@types/jest": "^24.0.11",
-    "@types/moment-range": "^3.1.2",
+    "@types/moment-range": "^4.0.0",
     "@types/pouchdb": "^5.4.28",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
-    "typescript": "^3.4.2"
+    "typescript": "^4.1.2"
   },
   "dependencies": {
     "docuri": "^4.2.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.1",
     "moment-range": "^4.0.2"
   },
   "scripts": {

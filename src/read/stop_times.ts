@@ -1,10 +1,10 @@
 import * as moment from 'moment';
-import { extendMoment, Range } from 'moment-range';
+import { extendMoment, DateRange } from 'moment-range';
 import { stopTime, trip } from '../uri'
 import { StopTime, Trip } from '../interfaces';
 import { extractDocs, timeOnly, notFound } from '../utils';
 
-extendMoment(moment);
+const { range } = extendMoment(moment);
 
 /**
  * Get the stop times associated with a trip, sorted by stop_sequence.
@@ -159,7 +159,7 @@ export function nextStopOfRoute(
  * Returns a moment range representing the first and last time in a set of
  * stop times.
  */
-export function scheduleRange(schedule: Iterable<StopTime>): Range {
+export function scheduleRange(schedule: Iterable<StopTime>): DateRange {
 	let earliest = Number.POSITIVE_INFINITY;
 	let latest = 0;
 	for (const time of schedule) {
@@ -170,5 +170,5 @@ export function scheduleRange(schedule: Iterable<StopTime>): Range {
 		if (end > latest) latest = end;
 	}
 
-	return moment.range(moment(earliest), moment(latest));
+	return range(moment(earliest), moment(latest));
 }

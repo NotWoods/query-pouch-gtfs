@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { extendMoment, Range } from 'moment-range';
+import { extendMoment, DateRange } from 'moment-range';
 import { trip } from '../uri';
 import { Trip, StopTime } from '../interfaces';
 import { getTripSchedule, scheduleRange } from './stop_times';
@@ -38,7 +38,7 @@ export function allTripsForRoute(
  */
 export function tripTimes(
 	stopTimeDB: PouchDB.Database<StopTime>,
-): (trip_id: string) => Promise<Range> {
+): (trip_id: string) => Promise<DateRange> {
 	return async id => scheduleRange(await getTripSchedule(stopTimeDB)(id));
 }
 
@@ -115,7 +115,7 @@ export function siblingTrips(
 
 		// Push trips into containers based on wheter they take place
 		// before the passed trip or after
-		type Result = { trip: Trip, range: Range };
+		type Result = { trip: Trip, range: DateRange };
 		let before: Result[] = [];
 		let after: Result[] = [];
 		await Promise.all(allTrips.map(async trip => {
